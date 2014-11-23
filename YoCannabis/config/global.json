@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "YoCannabis": {
+            "applicationId": "8YSXozExTA5CP1v7PyjefzMDQ6HoL4Zq3vevPQMe", 
+            "masterKey": "pG4MAXUnOBE94D3Ik9Mm55Ti94TdIMRY5ExoYlxu"
+        }, 
+        "_default": {
+            "link": "YoCannabis"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.3.1"
+    }
+}
