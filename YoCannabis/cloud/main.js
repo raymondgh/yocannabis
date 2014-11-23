@@ -31,9 +31,36 @@ app.get('/nearest', function(req, res) {
   var yoLongitude = (tempLocation.split(';'))[1];
     Parse.Config.get().then(function(config) {
         var PLACES_KEY = config.get("PLACES_KEY");
-        SendYo(yoName, tempLocation, function(){
-            res.end();
+
+        var placesRequest = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=dispensary&key=AIzaSyC85YqnYVCq4AD-VbCLrJyL0lHCo7-TmdA&rankby=distance&location=" + yoLatitude + "," + yoLongitude;
+        Parse.Cloud.httpRequest({
+            url: placesRequest,
+            method: "GET",
+            success: function (httpResponse) {
+                var data = JSON.parse(httpResponse.text);
+
+                console.log("Google Places Response " + JSON.stringify(data));
+                if ( data.results.length > 0 ) {
+                    var lat = data.results[0].geometry.location.lat;
+                    var lng = data.results[0].geometry.location.lng;
+                    var closestLocation = lat + ";" + lng;
+                    SendYo(yoName, closestLocation, function(){
+                        res.end();
+                    });
+
+                    console.log("Yo is sent to " + yoName + " with " + closestLocation);
+                } else {
+                    console.log("Found no closest match");
+                }
+
+
+            },
+            error: function (httpResponse) {
+                console.log("Fail to YO");
+            }
         });
+
+
 
     }, function(error) {
         // Something went wrong (e.g. request timed out)
